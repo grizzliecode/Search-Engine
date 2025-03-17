@@ -29,3 +29,14 @@ The backend is divided into 4 main components:
 *   The **preference component**: which deals with the prefences that can be set by the user;
 *   The **indexer**: which traverse the file system and indexes the files into the system;
 *   The **search** component: which deals with the retrieval of information from the files.
+
+### Class/Code Level
+
+Usually this level is not recomended to be drawed, due to the high chance of changes that may appear at this level, but rather generated directly using an IDE. Having said that below are the current Class diagrams for the main components of the backend.
+---
+![The class diagram indexer](.\Class_Diagram_Indexer.png) 
+---
+![The class diagram seach component](.\Class_Diagram_Search.png)
+---
+---
+![The class diagram preferences component](.\Class_Diagram_Preferences_Component.png)
