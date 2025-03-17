@@ -13,4 +13,19 @@ The C4 model describes the architecture similar to how an online map would descr
 ### The system contex
 ![The system context diagram](.\System_Context_Diagram.png) 
 Our system interacts with the local user of the computer and the file system of the computer.
-    
+
+### The Container level
+
+![The container level diagram](.\Container_Level_Diagram.png) 
+
+The main containers of our system are: the ***Desktop App***, responsible for the interaction with the user, the ***Api application***, containing the business logic and exposing the busines logic via a RESTful API, and a ***Relational Database*** used to store the information of the files.
+
+### The Component level
+
+![The component level diagram](.\Component_Level_Diagram.png) 
+
+The backend is divided into 4 main components:
+*   The **logger**: responsible for tracking all the actions performed by the application;
+*   The **preference component**: which deals with the prefences that can be set by the user;
+*   The **indexer**: which traverse the file system and indexes the files into the system;
+*   The **search** component: which deals with the retrieval of information from the files.
