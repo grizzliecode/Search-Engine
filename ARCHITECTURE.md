@@ -11,18 +11,18 @@ The C4 model describes the architecture similar to how an online map would descr
 *   Classes or code level: describes the design of each component, the separation in classes and interfaces.
 
 ### The system contex
-![The system context diagram](.\System_Context_Diagram.png) 
+![The system context diagram](System_Context_Diagram.png) 
 Our system interacts with the local user of the computer and the file system of the computer.
 
 ### The Container level
 
-![The container level diagram](.\Container_Level_Diagram.png) 
+![The container level diagram](Container_Level_Diagram.png) 
 
 The main containers of our system are: the ***Desktop App***, responsible for the interaction with the user, the ***Api application***, containing the business logic and exposing the busines logic via a RESTful API, and a ***Relational Database*** used to store the information of the files.
 
 ### The Component level
 
-![The component level diagram](.\Component_Level_Diagram.png) 
+![The component level diagram](Component_Level_Diagram.png) 
 
 The backend is divided into 4 main components:
 *   The **logger**: responsible for tracking all the actions performed by the application;
@@ -34,9 +34,9 @@ The backend is divided into 4 main components:
 
 Usually this level is not recomended to be drawed, due to the high chance of changes that may appear at this level, but rather generated directly using an IDE. Having said that below are the current Class diagrams for the main components of the backend.
 ---
-![The class diagram indexer](.\Class_Diagram_Indexer.png) 
+![The class diagram indexer](Class_Diagram_Indexer.png) 
 ---
-![The class diagram seach component](.\Class_Diagram_Search.png)
+![The class diagram seach component](Class_Diagram_Search.png)
 ---
 ---
-![The class diagram preferences component](.\Class_Diagram_Preferences_Component.png)
+![The class diagram preferences component](Class_Diagram_Preferences_Component.png)
