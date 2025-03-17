@@ -10,6 +10,10 @@ The C4 model describes the architecture similar to how an online map would descr
 *   Component level: describes how the roles of a container are distributed acress its components and how they comunicate with each other;
 *   Classes or code level: describes the design of each component, the separation in classes and interfaces.
 
+## Legend
+![Legend](Legenda.png)
+Other symbol that are used are UML symbols which are documented [here](https://www.tutorialspoint.com/uml/uml_basic_notations.htm).
+
 ### The system contex
 ![The system context diagram](System_Context_Diagram.png) 
 Our system interacts with the local user of the computer and the file system of the computer.
