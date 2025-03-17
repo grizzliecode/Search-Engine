@@ -12,10 +12,12 @@ The C4 model describes the architecture similar to how an online map would descr
 
 ## Legend
 ![Legend](Legenda.png)
+
 Other symbol that are used are UML symbols which are documented [here](https://www.tutorialspoint.com/uml/uml_basic_notations.htm).
 
 ### The system contex
 ![The system context diagram](System_Context_Diagram.png) 
+
 Our system interacts with the local user of the computer and the file system of the computer.
 
 ### The Container level
