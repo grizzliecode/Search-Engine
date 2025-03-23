@@ -12,16 +12,24 @@ import java.util.logging.Logger;
 public class IndexController {
     private Logger logger;
     private IndexService indexService;
+
     @Autowired
-    public IndexController(Logger logger, IndexService indexService1){
+    public IndexController(Logger logger, IndexService indexService1) {
         this.logger = logger;
         this.indexService = indexService1;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void startIndexer(){
+    public void startIndexer() {
         logger.info("Indexerer started");
+        indexService.deleteRecords();
         indexService.traverse();
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteRecords() {
+        logger.info("records deleted");
+        indexService.deleteRecords();
     }
 }
