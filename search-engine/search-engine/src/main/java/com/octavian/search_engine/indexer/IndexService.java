@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -79,7 +80,8 @@ public class IndexService {
                         Long size = (Long) attrs.size();
                         String path = file.toAbsolutePath().toString();
                         String lines = content.length() <= LINES_LENGTH ? content : content.substring(0, LINES_LENGTH);
-                        IndexModel im = new IndexModel(null, path, extension, size, content, lines);
+                        Instant last_modified = attrs.lastModifiedTime().toInstant();
+                        IndexModel im = new IndexModel(null, path, extension, size, content, lines, last_modified);
                         saveIM(im);
                     } catch (IOException e) {
                         logger.warning(e.toString());
