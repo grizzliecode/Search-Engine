@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS files (
                        extension TEXT NOT NULL,
                        file_size BIGINT NOT NULL,
                        content TEXT,
-                       lines TEXT
+                       lines TEXT,
+                       last_modified TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS files_fts (
                         ts_id INTEGER PRIMARY KEY REFERENCES files(file_id) ON DELETE CASCADE,
@@ -12,4 +13,4 @@ CREATE TABLE IF NOT EXISTS files_fts (
 );
 
 CREATE INDEX IF NOT EXISTS files_fts_idx ON files_fts USING GIN(tsv);
-
+CREATE INDEX IF NOT EXISTS idx_extension ON files(extension);

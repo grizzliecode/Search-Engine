@@ -23,7 +23,6 @@ public class IndexController {
     @ResponseStatus(HttpStatus.OK)
     public void startIndexer() {
         logger.info("Indexerer started");
-        indexService.deleteRecords();
         indexService.traverse();
     }
 
