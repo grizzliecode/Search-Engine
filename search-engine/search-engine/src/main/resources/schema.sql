@@ -11,3 +11,5 @@ CREATE TABLE IF NOT EXISTS files_fts (
                         tsv tsvector
 );
 
+CREATE INDEX IF NOT EXISTS files_fts_idx ON files_fts USING GIN(tsv);
+
