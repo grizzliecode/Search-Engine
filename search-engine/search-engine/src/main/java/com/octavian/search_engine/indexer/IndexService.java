@@ -9,14 +9,12 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 @Service
 public class IndexService {
     private final int LINES_LENGTH = 120;
-    private List<ContentReader> readers;
     private final Logger logger;
     private final PreferenceService pref;
     private final IndexRepository repository;
@@ -26,10 +24,6 @@ public class IndexService {
         this.logger = logger;
         this.pref = preferenceService;
         this.repository = indexRepository1;
-        this.readers = new ArrayList<>();
-        this.readers.add(new TextReader());
-        this.readers.add(new DocsReader());
-        this.readers.add(new PDFReader());
     }
 
     public void saveIM(IndexModel im) {
@@ -40,14 +34,6 @@ public class IndexService {
         this.repository.dropTables();
     }
 
-    public ContentReader getContentReader(String extension) {
-        return switch (extension) {
-            case "docs" -> this.readers.get(1);
-            case "docx" -> this.readers.get(1);
-            case "pdf" -> this.readers.get(2);
-            default -> this.readers.get(0);
-        };
-    }
 
     boolean isInside(List<String> ignored, String path) {
         return ignored.contains(path);
@@ -56,11 +42,9 @@ public class IndexService {
     public void traverse() {
         Preferences preferences = pref.getPreferences();
         Path startPath = Paths.get(preferences.path());
-
+        ReaderContext readerContext = new ReaderContext();
         try {
             Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
-                ContentReader contentReader = getContentReader("");
-
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                     if (isInside(preferences.ignored_paths(), dir.toString())) {
@@ -73,9 +57,9 @@ public class IndexService {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     logger.info("File: " + file);
-                    contentReader = getContentReader(getExtension(file.toString()));
+                    readerContext.setReader(getExtension(file.toString()));
                     try {
-                        String content = contentReader.getContent(file);
+                        String content = readerContext.getContent(file);
                         String extension = getExtension(file.toString());
                         Long size = (Long) attrs.size();
                         String path = file.toAbsolutePath().toString();
@@ -84,7 +68,7 @@ public class IndexService {
                         IndexModel im = new IndexModel(null, path, extension, size, content, lines, last_modified);
                         saveIM(im);
                     } catch (IOException e) {
-                        logger.warning(e.toString());
+                        logger.warning(e.toString() +  getExtension(file.toString()));
                     }
                     return FileVisitResult.CONTINUE;
                 }
