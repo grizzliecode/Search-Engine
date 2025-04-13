@@ -1,11 +1,9 @@
-package com.octavian.search_engine.indexer;
+package com.octavian.search_engine.indexer.file_utilities.file_reader;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.logging.Logger;
 
 @Component
 public class ReaderContext {
@@ -19,6 +17,10 @@ public class ReaderContext {
             }
             case "docs", "docx": {
                 this.reader = new DocsReader();
+                break;
+            }
+            case "exe":{
+                this.reader = new ExecutableReader();
                 break;
             }
             default:

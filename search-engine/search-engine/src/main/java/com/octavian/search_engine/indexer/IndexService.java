@@ -1,5 +1,8 @@
 package com.octavian.search_engine.indexer;
 
+import com.octavian.search_engine.indexer.file_utilities.FileHandler;
+import com.octavian.search_engine.indexer.file_utilities.FileProcessor;
+import com.octavian.search_engine.indexer.file_utilities.file_reader.ReaderContext;
 import com.octavian.search_engine.preferences.PreferenceService;
 import com.octavian.search_engine.preferences.Preferences;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
-import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -35,19 +37,16 @@ public class IndexService {
     }
 
 
-    boolean isInside(List<String> ignored, String path) {
-        return ignored.contains(path);
-    }
 
     public void traverse() {
         Preferences preferences = pref.getPreferences();
         Path startPath = Paths.get(preferences.path());
-        ReaderContext readerContext = new ReaderContext();
+        FileProcessor fileProcessor = new FileProcessor();
         try {
             Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-                    if (isInside(preferences.ignored_paths(), dir.toString())) {
+                    if (FileHandler.isInside(preferences.ignored_paths(), dir.toString()) || attrs.isSymbolicLink()) {
                         logger.info("Ingnored " + dir);
                         return FileVisitResult.SKIP_SUBTREE;
                     }
@@ -57,18 +56,17 @@ public class IndexService {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     logger.info("File: " + file);
-                    readerContext.setReader(getExtension(file.toString()));
+                    if(!FileHandler.isText(file,logger)){
+                        if(!FileHandler.isExtensionSupported(FileHandler.getExtension(file.toString()))){
+                            logger.info("File format not supported" + FileHandler.getExtension(file.toString()));
+                            return FileVisitResult.CONTINUE;
+                        }
+                    }
                     try {
-                        String content = readerContext.getContent(file);
-                        String extension = getExtension(file.toString());
-                        Long size = (Long) attrs.size();
-                        String path = file.toAbsolutePath().toString();
-                        String lines = content.length() <= LINES_LENGTH ? content : content.substring(0, LINES_LENGTH);
-                        Instant last_modified = attrs.lastModifiedTime().toInstant();
-                        IndexModel im = new IndexModel(null, path, extension, size, content, lines, last_modified);
-                        saveIM(im);
+                        IndexModel im = fileProcessor.processFile(file,attrs);
+                        repository.saveModel(im);
                     } catch (IOException e) {
-                        logger.warning(e.toString() +  getExtension(file.toString()));
+                        logger.warning(e.toString() +  FileHandler.getExtension(file.toString()));
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -91,20 +89,5 @@ public class IndexService {
 
     }
 
-    public String getExtension(String path) {
-        return com.google.common.io.Files.getFileExtension(path);
-    }
 
-    public boolean isText(Path path) {
-        String type = null;
-        try {
-            type = Files.probeContentType(path);
-        } catch (IOException e) {
-            logger.warning("Couldn't find the type of file " + path.getFileName());
-        }
-        if (type != null && type.startsWith("text")) {
-            return true;
-        }
-        return false;
-    }
 }

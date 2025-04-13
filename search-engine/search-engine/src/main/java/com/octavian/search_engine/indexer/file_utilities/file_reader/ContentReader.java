@@ -1,4 +1,4 @@
-package com.octavian.search_engine.indexer;
+package com.octavian.search_engine.indexer.file_utilities.file_reader;
 
 import java.io.IOException;
 import java.nio.file.Path;

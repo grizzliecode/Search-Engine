@@ -1,4 +1,4 @@
-package com.octavian.search_engine.indexer;
+package com.octavian.search_engine.indexer.file_utilities.file_reader;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;

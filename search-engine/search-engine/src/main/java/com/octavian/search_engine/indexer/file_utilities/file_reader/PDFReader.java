@@ -1,4 +1,4 @@
-package com.octavian.search_engine.indexer;
+package com.octavian.search_engine.indexer.file_utilities.file_reader;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
