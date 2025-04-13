@@ -13,24 +13,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExecutableMetadataExtractor implements MetadataExtractor{
-    private static final float ACCESSED_WEIGHT = 0.5f;
+    private static final float ACCESSED_WEIGHT = 0.4f;
     private static final float ENTROPY_WEIGHT = -0.25f;
-    private static final float PATH_ENTROPY_WEIGHT = -0.15f;
+    private static final float PATH_ENTROPY_WEIGHT = -0.2f;
 
     @Override
     public IndexModel getMetadata(Path file_path, BasicFileAttributes basicFileAttributes, IndexModel im){
-        Instant lastAccessed = basicFileAttributes.lastAccessTime().toInstant();
+        Instant lastModified = basicFileAttributes.lastModifiedTime().toInstant();
         float rank_score = 0.0f;
         Instant now = Instant.now();
         Instant oneDayAgo = now.minus(Duration.ofDays(1));
         Instant oneWeekAgo = now.minus(Duration.ofDays(7));
         Instant oneMonthAgo = now.minus(Duration.ofDays(30));
 
-        if (lastAccessed.isAfter(oneDayAgo)) {
+        if (lastModified.isAfter(oneDayAgo)) {
             rank_score = 5.0f;
-        } else if (lastAccessed.isAfter(oneWeekAgo)) {
+        } else if (lastModified.isAfter(oneWeekAgo)) {
             rank_score = 3.0f;
-        } else if (lastAccessed.isAfter(oneMonthAgo)) {
+        } else if (lastModified.isAfter(oneMonthAgo)) {
             rank_score = 1.0f;
         } else {
             rank_score = 0.5f;
@@ -41,7 +41,7 @@ public class ExecutableMetadataExtractor implements MetadataExtractor{
         } catch (IOException e) {
             entropy = 0.0f;
         }
-        rank_score = rank_score * ACCESSED_WEIGHT + entropy * ENTROPY_WEIGHT + FileHandler.getPathEntropy(file_path) * PATH_ENTROPY_WEIGHT;
+        rank_score = rank_score * ACCESSED_WEIGHT + entropy * ENTROPY_WEIGHT + 5.0f+ FileHandler.getPathEntropy(file_path)  * PATH_ENTROPY_WEIGHT;
         return new IndexModel(im.file_id(),
                 im.file_path(),
                 im.extension(),

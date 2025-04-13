@@ -32,12 +32,8 @@ public class FileHandler {
     }
 
     public static float getPathEntropy(Path path){
-        float total_entropy = 0f;
-        int parts = 0;
-        for(Path part: path){
-            parts++;
-            float entropy = 0f;
-            String input = part.toString();
+        float entropy = 0f;
+            String input = path.toString().toLowerCase();
             if(input.isEmpty()){
                 entropy = 0.0f;
             }
@@ -51,10 +47,8 @@ public class FileHandler {
                     float prob = (float) count/length;
                     entropy -= (float) (prob*(Math.log(prob)/Math.log(2)));
                 }
-            }
-            total_entropy += entropy;
         }
-        return parts == 0 ? 0.0f : total_entropy/parts;
+        return entropy;
     }
 
     public static boolean isExtensionSupported(String extension){

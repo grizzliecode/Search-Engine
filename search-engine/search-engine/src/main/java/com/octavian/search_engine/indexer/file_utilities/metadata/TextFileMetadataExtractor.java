@@ -8,29 +8,31 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.logging.Logger;
 
 public class TextFileMetadataExtractor implements MetadataExtractor{
-    private static final float ACCESSED_WEIGHT = 0.20f;
-    private static final float PATH_ENTROPY_WEIGHT = -0.30f;
+    private static final float ACCESSED_WEIGHT = 0.2f;
+    private static final float PATH_ENTROPY_WEIGHT = -0.65f;
     @Override
     public IndexModel getMetadata(Path file_path, BasicFileAttributes basicFileAttributes, IndexModel im){
-        Instant lastAccessed = basicFileAttributes.lastAccessTime().toInstant();
+        Instant lastModified = basicFileAttributes.lastModifiedTime().toInstant();
         float rank_score = 0f;
         Instant now = Instant.now();
         Instant oneDayAgo = now.minus(Duration.ofDays(1));
         Instant oneWeekAgo = now.minus(Duration.ofDays(7));
         Instant oneMonthAgo = now.minus(Duration.ofDays(30));
 
-        if (lastAccessed.isAfter(oneDayAgo)) {
+        if (lastModified.isAfter(oneDayAgo)) {
             rank_score = 5.0f;
-        } else if (lastAccessed.isAfter(oneWeekAgo)) {
+        } else if (lastModified.isAfter(oneWeekAgo)) {
+            rank_score = 4.0f;
+        } else if (lastModified.isAfter(oneMonthAgo)) {
             rank_score = 3.0f;
-        } else if (lastAccessed.isAfter(oneMonthAgo)) {
-            rank_score = 1.0f;
         } else {
-            rank_score = 0.5f;
+            rank_score = 1.5f;
         }
-        rank_score = ACCESSED_WEIGHT*rank_score+PATH_ENTROPY_WEIGHT*FileHandler.getPathEntropy(file_path);
+        System.out.println(FileHandler.getPathEntropy(file_path));
+        rank_score = ACCESSED_WEIGHT*rank_score+PATH_ENTROPY_WEIGHT*FileHandler.getPathEntropy(file_path) + 5.0f;
         return new IndexModel(im.file_id(),
                 im.file_path(),
                 im.extension(),
