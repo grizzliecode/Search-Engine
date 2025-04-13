@@ -16,6 +16,7 @@ public class ExecutableMetadataExtractor implements MetadataExtractor{
     private static final float ACCESSED_WEIGHT = 0.4f;
     private static final float ENTROPY_WEIGHT = -0.25f;
     private static final float PATH_ENTROPY_WEIGHT = -0.2f;
+    private static final float PATH_LENGTH_WEIGHT = 0.2f;
 
     @Override
     public IndexModel getMetadata(Path file_path, BasicFileAttributes basicFileAttributes, IndexModel im){
@@ -41,7 +42,14 @@ public class ExecutableMetadataExtractor implements MetadataExtractor{
         } catch (IOException e) {
             entropy = 0.0f;
         }
-        rank_score = rank_score * ACCESSED_WEIGHT + entropy * ENTROPY_WEIGHT + 5.0f+ FileHandler.getPathEntropy(file_path)  * PATH_ENTROPY_WEIGHT;
+        float length_score = 0f;
+        if(file_path.getNameCount() < 5){
+            length_score = 3;
+        } else if (file_path.getNameCount() < 10) {
+            length_score = 1.5f;
+        }
+        else length_score = 0.5f;
+        rank_score = rank_score * ACCESSED_WEIGHT + entropy * ENTROPY_WEIGHT + 5.0f+ FileHandler.getPathEntropy(file_path)  * PATH_ENTROPY_WEIGHT + + length_score * PATH_LENGTH_WEIGHT;
         return new IndexModel(im.file_id(),
                 im.file_path(),
                 im.extension(),
