@@ -12,5 +12,6 @@ public class EnvLoader {
         System.setProperty("DB_URL", dotenv.get("DB_URL"));
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+        System.setProperty("LOGGING_FORMAT", dotenv.get("LOGGING_FORMAT"));
     }
 }

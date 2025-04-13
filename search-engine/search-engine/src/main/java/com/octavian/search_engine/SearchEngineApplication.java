@@ -9,16 +9,8 @@ import java.util.logging.Logger;
 
 @SpringBootApplication
 public class SearchEngineApplication {
-	@Autowired
-	private Logger logger;
-	public static  Logger log;
-	@PostConstruct
-	void init(){
-		log = logger;
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(SearchEngineApplication.class, args);
-		log.info("app restarted");
 	}
 
 }

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -17,8 +18,10 @@ public class LoggerConfig {
     public Logger getCustomLogger(){
         Logger logger = Logger.getLogger("com.octavian.search-engine");
         try{
-            FileHandler fileHandler = new FileHandler("logs.txt");
-            fileHandler.setFormatter(new SimpleFormatter());
+            String format = System.getProperty("LOGGING_FORMAT");
+            FileHandler fileHandler = new FileHandler("logs." + format);
+            Formatter formatter = FormatterFactory.createFormatter(format);
+            fileHandler.setFormatter(formatter);
             logger.addHandler(fileHandler);
         }
         catch (IOException e)
