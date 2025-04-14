@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/index")
+@CrossOrigin(origins = "http://localhost:5173")
 public class IndexController {
     private Logger logger;
     private IndexService indexService;

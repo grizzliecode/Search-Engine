@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/preferences")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PreferenceController{
     private final Logger logger;
     private final PreferenceService pf;
