@@ -39,9 +39,6 @@ public class TextFileMetadataExtractor implements MetadataExtractor{
         } else {
             rank_score = 1.5f;
         }
-        System.out.println(length_score);
-        System.out.println(file_path.getNameCount());
-        System.out.println(rank_score);
         rank_score = ACCESSED_WEIGHT*rank_score+PATH_ENTROPY_WEIGHT*FileHandler.getPathEntropy(file_path) + 5.0f + length_score * PATH_LENGTH_WEIGHT;
         return new IndexModel(im.file_id(),
                 im.file_path(),

@@ -59,6 +59,12 @@ public class SearchController {
         }
     }
 
+    @GetMapping("/suggestion")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getSuggestions(@RequestParam String partial){
+        return this.searchService.getSuggestions(partial);
+    }
+
     @PostMapping("/open")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> openFile(@RequestParam String file_path) {

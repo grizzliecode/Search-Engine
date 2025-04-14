@@ -5,6 +5,7 @@ import com.octavian.search_engine.indexer.file_utilities.FileProcessor;
 import com.octavian.search_engine.indexer.file_utilities.file_reader.ReaderContext;
 import com.octavian.search_engine.preferences.PreferenceService;
 import com.octavian.search_engine.preferences.Preferences;
+import org.apache.poi.EmptyFileException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class IndexService {
                 }
 
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs){
                     logger.info("File: " + file);
                     if(!FileHandler.isText(file,logger)){
                         if(!FileHandler.isExtensionSupported(FileHandler.getExtension(file.toString()))){
@@ -65,7 +66,7 @@ public class IndexService {
                     try {
                         IndexModel im = fileProcessor.processFile(file,attrs);
                         repository.saveModel(im);
-                    } catch (IOException e) {
+                    } catch (IOException | EmptyFileException e) {
                         logger.warning(e.toString() +  FileHandler.getExtension(file.toString()));
                     }
                     return FileVisitResult.CONTINUE;

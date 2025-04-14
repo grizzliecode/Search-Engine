@@ -1,5 +1,6 @@
 package com.octavian.search_engine.indexer.file_utilities.file_reader;
 
+import org.apache.poi.EmptyFileException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class ReaderContext {
         }
     }
 
-    public String getContent(Path path) throws IOException {
+    public String getContent(Path path) throws IOException, EmptyFileException {
         return this.reader.getContent(path);
     }
 }

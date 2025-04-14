@@ -5,6 +5,7 @@ import com.octavian.search_engine.indexer.file_utilities.file_reader.ContentRead
 import com.octavian.search_engine.indexer.file_utilities.file_reader.ReaderContext;
 import com.octavian.search_engine.indexer.file_utilities.metadata.MetadataContext;
 import com.octavian.search_engine.indexer.file_utilities.metadata.MetadataExtractor;
+import org.apache.poi.EmptyFileException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ public class FileProcessor {
     private ReaderContext readerContext = new ReaderContext();
     private MetadataContext metadataContext = new MetadataContext();
 
-    public IndexModel processFile(Path file_path, BasicFileAttributes basicFileAttributes) throws IOException {
+    public IndexModel processFile(Path file_path, BasicFileAttributes basicFileAttributes) throws IOException, EmptyFileException {
         readerContext.setReader(FileHandler.getExtension(file_path.toString()));
         metadataContext.setMetadataExtractor(FileHandler.getExtension(file_path.toString()));
         String content = readerContext.getContent(file_path);
