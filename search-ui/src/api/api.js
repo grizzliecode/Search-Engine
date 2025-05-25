@@ -1,6 +1,7 @@
 const BASE_URL = "http://localhost:8080";
 
-export const getPreferences = () => fetch(`${BASE_URL}/preferences`).then(res => res.json());
+export const getPreferences = () =>
+  fetch(`${BASE_URL}/preferences`).then(res => res.json());
 
 export const setPreferences = (prefs) =>
   fetch(`${BASE_URL}/preferences`, {
@@ -22,3 +23,7 @@ export const openFile = (filePath) =>
 
 export const triggerIndex = () =>
   fetch(`${BASE_URL}/index`, { method: "POST" });
+
+export const getSpellingSuggestions = (query) =>
+  fetch(`${BASE_URL}/correct?query=${encodeURIComponent(query)}`)
+    .then(res => res.text());
