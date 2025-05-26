@@ -23,6 +23,7 @@ public class WidgetController {
                 ExecutableProcessor.showExeHeaderWindow(result);
     }
     //TODO
+    //TODO
     @GetMapping("/show_text")
     public void showText(@RequestParam List<String> results) throws Exception{
         for (String result: results){
