@@ -11,17 +11,18 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @Service
-public class SearchService {
+public class SearchService implements SearchFiles {
     private final Logger logger;
     private SearchRepository repository;
 
-    private final QueryHistory queryHistory = new QueryHistory();
+    private final QueryHistory queryHistory;
     private final SearchPublisher searchPublisher = new SearchPublisher();
     @Autowired
-    public SearchService(Logger logger, SearchRepository repository){
+    public SearchService(Logger logger, SearchRepository repository, QueryHistory queryHistory){
         this.logger = logger;
         this.repository = repository;
-        this.searchPublisher.addObserver(queryHistory);
+        this.queryHistory = queryHistory;
+        this.searchPublisher.addObserver(this.queryHistory);
     }
 
     public List<SearchModel> getFiles(String query) throws InputMismatchException {

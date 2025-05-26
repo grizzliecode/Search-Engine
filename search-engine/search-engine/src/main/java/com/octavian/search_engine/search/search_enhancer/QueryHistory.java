@@ -1,22 +1,23 @@
 package com.octavian.search_engine.search.search_enhancer;
 
+import com.octavian.search_engine.search.Cache;
 import com.octavian.search_engine.search.SearchModel;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.util.Tuple;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+@Component
 public class QueryHistory implements SearchObserver{
 
-    private int MAX = 10;
-    private Map<String, Tuple<Float, List<SearchModel>>> history;
-    public QueryHistory() {
-        this.history= new LinkedHashMap<String, Tuple<Float, List<SearchModel>>>(MAX, 1, true) {
-            @Override
-            protected boolean removeEldestEntry(Map.Entry<String, Tuple<Float, List<SearchModel>>> eldest) {
-                return size() > MAX;
-            }
-        };
+    private Cache history;
+    @Autowired
+    public QueryHistory(Cache cache) {
+        this.history = cache;
     }
     @Override
     public synchronized void update(String query, List<SearchModel> results) {

@@ -7,6 +7,7 @@ function SearchBar({ query, setQuery, onSearch }) {
     const [showSpelling, setShowSpelling] = useState(false);
     const [spelling, setSpelling] = useState(null);
 
+
     useEffect(() => {
         if (query.trim() && showSuggestions) {
             getSuggestions(query).then(setSuggestions);

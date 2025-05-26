@@ -1,5 +1,6 @@
 package com.octavian.search_engine.search;
 
+import com.octavian.search_engine.search.widget.WidgetFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -20,11 +21,15 @@ public class SearchController {
 
     private final Logger logger;
     private final SearchService searchService;
+    private SearchCache searchCache;
+    private WidgetFactory widgetFactory;
 
     @Autowired
-    public SearchController(Logger logger, SearchService searchService) {
+    public SearchController(Logger logger, SearchService searchService, SearchCache searchCache, WidgetFactory widgetFactory) {
         this.logger = logger;
         this.searchService = searchService;
+        this.searchCache = searchCache;
+        this.widgetFactory = widgetFactory;
     }
 
     //    @GetMapping("/by-content")
@@ -52,13 +57,16 @@ public class SearchController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> searchFiles(@RequestParam String query) {
         try {
-            List<SearchModel> result = this.searchService.getFiles(query);
-            return ResponseEntity.ok(result);
+            List<SearchModel> result = this.searchCache.getFiles(query);
+            String widgetType = this.widgetFactory.getBestFit(query,result).getType();
+            SearchResponse response = new SearchResponse(result, widgetType);
+            return ResponseEntity.ok(response);
         } catch (InputMismatchException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Invalid input: " + e.getMessage());
         }
     }
+
 
     @GetMapping("/suggestion")
     @ResponseStatus(HttpStatus.OK)

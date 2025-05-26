@@ -22,6 +22,18 @@ public class SearchRepository {
         this.logger = logger;
     }
 
+    public String getContent(String filePath) {
+        String query = "SELECT content FROM files WHERE file_path = ?";
+        try {
+            return this.jdbcClient.sql(query)
+                    .param(filePath)
+                    .query(String.class)
+                    .single();
+        } catch (Exception e) {
+            logger.warning("Error fetching content for file_path: " + filePath + " - " + e.getMessage());
+            return null;
+        }
+    }
 //    public List<SearchModel> retrieveByContent(String content) {
 //        String query = "SELECT f.file_id, f.file_path, f.extension, f.file_size, f.lines FROM files f JOIN files_fts ft ON ft.ts_id = f.file_id WHERE ft.tsv @@ plainto_tsquery('simple',?)";
 //        try {

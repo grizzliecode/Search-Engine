@@ -49,7 +49,7 @@ public class ExecutableMetadataExtractor implements MetadataExtractor{
             length_score = 1.5f;
         }
         else length_score = 0.5f;
-        rank_score = rank_score * ACCESSED_WEIGHT + entropy * ENTROPY_WEIGHT + 5.0f+ FileHandler.getPathEntropy(file_path)  * PATH_ENTROPY_WEIGHT + + length_score * PATH_LENGTH_WEIGHT;
+        rank_score = rank_score * ACCESSED_WEIGHT + entropy * ENTROPY_WEIGHT + 5.0f+ FileHandler.getPathEntropy(file_path)  * PATH_ENTROPY_WEIGHT +  +length_score * PATH_LENGTH_WEIGHT;
         return new IndexModel(im.file_id(),
                 im.file_path(),
                 im.extension(),

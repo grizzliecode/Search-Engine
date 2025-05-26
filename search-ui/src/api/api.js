@@ -27,3 +27,20 @@ export const triggerIndex = () =>
 export const getSpellingSuggestions = (query) =>
   fetch(`${BASE_URL}/correct?query=${encodeURIComponent(query)}`)
     .then(res => res.text());
+
+// Helper function to encode array of strings to multiple query params
+function encodeResultsParam(results) {
+  return results.map(r => `results=${encodeURIComponent(r)}`).join('&');
+}
+
+// New API call for show_text (list of file paths)
+export const showText = (results) => {
+  const params = encodeResultsParam(results);
+  return fetch(`${BASE_URL}/show_text?${params}`).then(res => res.text());
+};
+
+// New API call for show_exe (list of file paths)
+export const showExe = (results) => {
+  const params = encodeResultsParam(results);
+  return fetch(`${BASE_URL}/show_exe?${params}`).then(res => res.text());
+};
