@@ -22,7 +22,7 @@ public class WidgetController {
             if(result.contains(".exe"))
                 ExecutableProcessor.showExeHeaderWindow(result);
     }
-
+    //TODO
     @GetMapping("/show_text")
     public void showText(@RequestParam List<String> results) throws Exception{
         for (String result: results){
